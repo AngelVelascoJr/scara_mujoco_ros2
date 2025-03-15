@@ -13,7 +13,7 @@ class TrajectoryTest(Node):
         self.trajectory_publisher = self.create_publisher(JointTrajectory, topic_name, 10)
         self.joints = ['link_1_joint', 'link_2_joint', 'link_3_joint']
         self.goal_positions_list = [
-                            [1.911, 0.8322, -0.4118, -1.557],
+                            [1.911, 0.8322, -0.4118],
                             [-1.6132166399999996, 1.3816826400000002, 0.32913327999999975],
                             [-1.6132166399999996, -0.14278679999999988, -0.4230057999999999],
                             [-1.6132166399999996, -0.39063647999999995, 2.8973],
