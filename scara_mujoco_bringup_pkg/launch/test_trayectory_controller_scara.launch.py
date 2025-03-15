@@ -9,25 +9,17 @@ from ament_index_python.packages import get_package_share_path
 from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python import get_package_share_directory
-from launch.event_handlers import OnProcessExit
+from launch.event_handlers import OnProcessExit, OnProcessStart
 
 
 
 def generate_launch_description():
     
-    urdf_path = os.path.join(get_package_share_path('examen_description'),'urdf','scara_trajectory_controller.xacro')
+    urdf_path = os.path.join(get_package_share_path('scara_mujoco_description_pkg'),'urdf','scara_trajectory_controller.xacro')
     
-    rviz_config_path = os.path.join(get_package_share_path('examen_bringup'),'rviz','scara_trayectory_rviz.rviz')
+    rviz_config_path = os.path.join(get_package_share_path('scara_mujoco_bringup_pkg'),'rviz','scara_trayectory_rviz.rviz')
     
     robot_description = ParameterValue(Command(['xacro ', urdf_path]), value_type=str)
-
-    world = os.path.join(get_package_share_directory('examen_bringup'),'worlds','MiMundoTioMiMundo')
-    
-    
-    gazebo = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),launch_arguments={'world': world}.items()
-             )
     
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -49,13 +41,22 @@ def generate_launch_description():
         executable='joint_state_publisher'
     )
 
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
-                        arguments=['-topic', 'robot_description',
-                                   '-entity', 'scara'],
-                        output='screen')
-    
+    controller_config_file = os.path.join(get_package_share_path('scara_mujoco_description_pkg'), 'config', 'scara_trajectory_controller.yaml')
+
+    node_mujoco_ros2_control = Node(
+        package='mujoco_ros2_control',
+        executable='mujoco_ros2_control',
+        output='screen',
+        parameters=[
+            {'robot_description':robot_description},
+            controller_config_file,
+            {'mujoco_model_path':os.path.join(get_package_share_path('scara_mujoco_description_pkg'), 'mujoco_models', 'test_scara.xml')} # aqui es como el world
+        ]
+    )
+
     scara_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'scara_trajectory_controller'],
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 
+             'scara_trajectory_controller'],
         output='screen'
     )
 
@@ -64,13 +65,11 @@ def generate_launch_description():
              'joint_state_broadcaster'],
         output='screen' 
     )
-
-    
     
     return LaunchDescription([
         RegisterEventHandler(
             event_handler=OnProcessExit(
-                target_action=spawn_entity,
+                target_action=node_mujoco_ros2_control,
                 on_exit=[load_joint_state_controller],
             )
         ),
@@ -80,10 +79,9 @@ def generate_launch_description():
                 on_exit=[scara_controller],
             )
         ),
-        node_robot_state_publisher,
         joint_state_publisher,
+        node_robot_state_publisher,
         config_arg,
         rviz2_node,
-        gazebo,
-        spawn_entity
+        node_mujoco_ros2_control,
     ])
