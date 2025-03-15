@@ -26,14 +26,12 @@
         </joint>
     </ros2_control>
 
-    <!--Pluging de control 
-    <gazebo>
-        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control" >
-            <robot_param>robot_description</robot_param>
-            <robot_param_node>robot_state_publisher</robot_param_node>
-            <parameters>$(find ${package_name})/config/scara_trajectory_controller.yaml</parameters>
-        </plugin>
-    </gazebo>   -->
+    <!--Pluging de control-->
+    <plugin name="control_plugin" filename="libmujoco_system_plugins.so" >
+        <robot_param>robot_description</robot_param>
+        <robot_param_node>robot_state_publisher</robot_param_node>
+        <parameters>$(find ${package_name})/config/scara_trajectory_controller.yaml</parameters>
+    </plugin>
 
 
 </robot>

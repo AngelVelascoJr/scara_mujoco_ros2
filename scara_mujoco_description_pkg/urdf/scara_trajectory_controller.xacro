@@ -2,7 +2,7 @@
 
 <robot name="robot_scara" xmlns:xacro="http://ros.org/wiki/xacro" >
 
-    <xacro:property name="package_name" value="examen_description"/>
+    <xacro:property name="package_name" value="scara_mujoco_description_pkg"/>
 
     <xacro:include filename="$(find ${package_name})/urdf/scara_urdf.xacro"/>
 
