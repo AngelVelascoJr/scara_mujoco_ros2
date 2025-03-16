@@ -36,11 +36,6 @@ def generate_launch_description():
         arguments=['-d', rviz_config_path]
     )
 
-    joint_state_publisher = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher'
-    )
-
     controller_config_file = os.path.join(get_package_share_path('scara_mujoco_description_pkg'), 'config', 'scara_trajectory_controller.yaml')
 
     node_mujoco_ros2_control = Node(
@@ -79,7 +74,6 @@ def generate_launch_description():
                 on_exit=[scara_controller],
             )
         ),
-        joint_state_publisher,
         node_robot_state_publisher,
         config_arg,
         rviz2_node,
