@@ -2,6 +2,10 @@
 	<option gravity="0 0 -9.81">
 		<flag contact="enable" />
 	</option>
+    <!-- no funciona, no se por que xd-->
+    <visual>
+        <rgba contactforce="1 1 1 1"/>
+    </visual>
 	<worldbody>
         <light diffuse=".5 .5 .5" pos="0 0 5" dir="0 0 -1" />
         <body name="world_link" pos="0 0 0">
@@ -13,15 +17,15 @@
                 <body name="link_1" pos="0.1 0 0.15">
                     <!--<geom type="sphere" pos="0 0 0" size="0.1 0.1 0.1" rgba="0.639 0.286 0.643 1" />-->
                     <geom type="box" pos="0.25 0 0.05" size="0.25 0.05 0.05" rgba="0 1 0 0.5" />
-                    <joint name="link_1_joint" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+                    <joint name="link_1_joint" type="hinge" axis="0 0 1" range="-90 90" limited="true"/>
                     <body name="link_2" pos="0.5 0 0.1">
                         <!--<geom type="sphere" pos="0 0 0" size="0.1 0.1 0.1" rgba="0.639 0.286 0.643 1" />-->
                         <geom type="box" pos="0.25 0 0.05" size="0.25 0.05 0.05" rgba="0 0 1 0.5" />
-                        <joint name="link_2_joint" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+                        <joint name="link_2_joint" type="hinge" axis="0 0 1" range="-90 90" limited="true"/>
                         <body name="link_3" pos="0.5 0 0.1">
                             <!--<geom type="sphere" pos="0 0 0" size="0.1 0.1 0.1" rgba="0.639 0.286 0.643 1" />-->
                             <geom type="box" pos="0.25 0 0.05" size="0.25 0.05 0.05" rgba="1 0 0 0.5" />
-                            <joint name="link_3_joint" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+                            <joint name="link_3_joint" type="hinge" axis="0 0 1" range="-90 90" limited="true"/>
                         </body>
                     </body>
                 </body>
