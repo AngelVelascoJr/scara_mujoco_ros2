@@ -1,9 +1,9 @@
 <launch>
 
     <let name="urdf_path"
-        value="$(find-pkg-share examen_description)/urdf/scara_trajectory_controller.xacro" />
+        value="$(find-pkg-share scara_mujoco_description_pkg)/urdf/scara_trajectory_controller.xacro" />
     <let name="rviz_config"
-        value="$(find-pkg-share examen_description)/rviz/scara_rviz.rviz" />
+        value="$(find-pkg-share scara_mujoco_description_pkg)/rviz/scara_rviz.rviz" />
     <node pkg="robot_state_publisher" exec="robot_state_publisher" >
         <param name="robot_description"
             value="$(command 'xacro $(var urdf_path)')" />
